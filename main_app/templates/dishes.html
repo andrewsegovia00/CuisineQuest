@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Random Dishes</h1>
+    <ul>
+        {% for meal in random_meals %}
+        <li>
+            <h3>{{ meal.strMeal }}</h3>
+            <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}">
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
