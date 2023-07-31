@@ -3,6 +3,12 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Dish
 import requests
 import webbrowser
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 
 # Create your views here.
 def home(request):
@@ -48,20 +54,39 @@ def dishes_detail(request, dish_id):
     dish = Dish.objects.get(id=dish_id)
     return render(request, 'dishes/detail.html', {'dish': dish})
 
+@login_required
 def dishes_index(request):
-    dishes = Dish.objects.all()
+    dishes = Dish.objects.filter(user=request.user)
     return render(request, 'dishes/index.html', {'dishes': dishes})
 
-class DishCreate(CreateView):
+class DishCreate(LoginRequiredMixin, CreateView):
   model = Dish
   fields = ['name', 'origin', 'description']
   success_url = '/dishes/'
+  def form_valid(self, form):
+    form.instance.user = self.request.user 
+    return super().form_valid(form)
 
-class DishUpdate(UpdateView):
+class DishUpdate(LoginRequiredMixin, UpdateView):
     model = Dish
     fields = ['origin', 'description']
     success_url = '/dishes'
 
-class DishDelete(DeleteView):
+class DishDelete(LoginRequiredMixin, DeleteView):
     model = Dish
     success_url = '/dishes'
+
+def signup(request):
+  error_message = ''
+  if request.method == 'POST':
+
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      user = form.save()
+      login(request, user)
+      return redirect('index')
+    else:
+      error_message = 'Invalid sign up - try again'
+  form = UserCreationForm()
+  context = {'form': form, 'error_message': error_message}
+  return render(request, 'registration/signup.html', context)

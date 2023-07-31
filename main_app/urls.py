@@ -10,4 +10,5 @@ urlpatterns = [
     path('dishes/create/', views.DishCreate.as_view(), name='dishes_create'),
     path('dishes/<int:pk>/update/', views.DishUpdate.as_view(), name='dishes_update'),
     path('dishes/<int:pk>/delete/', views.DishDelete.as_view(), name='dishes_delete'),
+    path('accounts/signup/', views.signup, name='signup'),
 ]
