@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if dishes %}
+    {% for dish in dishes %}
+    <div class="card">
+        <a href="/dishes/{{ dish.id }}">
+        <div class="card-content">
+            <span class="card-title">{{ dish.name }}</span>
+            <p>Origin: {{ dish.origin }}</p>
+            <p>Description: {{ dish.description|linebreaks }}</p>
+        </div>
+        </a>
+    </div>
+    {% endfor %}
+{% else %}
+    <h1>There is no dish added yet. </h1>
+{% endif %}
+{% endblock %}
