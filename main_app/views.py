@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Dish
 import requests
 import webbrowser
 
@@ -23,12 +25,12 @@ def daily_dish(request):
             'dish_picture_url': dish_picture_url,
         }
 
-        return render(request, 'daily_dish.html', context)
+        return render(request, 'dishes/daily_dish.html', context)
     else:
         return render(request, 'error.html') 
+
     
-    
-def dishes(request):
+def dishes_list(request):
     api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
 
     random_meals = []
@@ -40,4 +42,26 @@ def dishes(request):
             random_meal = data['meals'][0]
             random_meals.append(random_meal)
     
-    return render(request, 'dishes.html', {'random_meals': random_meals})
+    return render(request, 'dishes/dishes.html', {'random_meals': random_meals})
+
+def dishes_detail(request, dish_id):
+    dish = Dish.objects.get(id=dish_id)
+    return render(request, 'dishes/detail.html', {'dish': dish})
+
+def dishes_index(request):
+    dishes = Dish.objects.all()
+    return render(request, 'dishes/index.html', {'dishes': dishes})
+
+class DishCreate(CreateView):
+  model = Dish
+  fields = ['name', 'origin', 'description']
+  success_url = '/dishes/'
+
+class DishUpdate(UpdateView):
+    model = Dish
+    fields = ['origin', 'description']
+    success_url = '/dishes'
+
+class DishDelete(DeleteView):
+    model = Dish
+    success_url = '/dishes'
