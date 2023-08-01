@@ -11,4 +11,5 @@ urlpatterns = [
     path('dishes/<int:pk>/update/', views.DishUpdate.as_view(), name='dishes_update'),
     path('dishes/<int:pk>/delete/', views.DishDelete.as_view(), name='dishes_delete'),
     path('accounts/signup/', views.signup, name='signup'),
+    path('<int:food_id>/', views.post_detail, name='post_detail'),
 ]

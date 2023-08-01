@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Dish
+from .models import Dish, Comment
 import requests
 import webbrowser
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CommentForm
 
 
 
@@ -90,3 +91,37 @@ def signup(request):
   form = UserCreationForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
+
+
+def post_detail(request, food_id):
+    dish = get_object_or_404(Dish, id=food_id)
+    comments = dish.comments.all()
+    new_comment = None
+
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = dish
+            new_comment.save()
+
+            return redirect('post_detail', food_id=dish.id)
+    else:
+        comment_form = CommentForm()
+
+    context = {
+        'dish': dish,
+        'comments': comments,
+        'new_comment': new_comment,
+        'comment_form': comment_form,
+    }
+
+    return render(request, 'main_app/comment_form.html', context)
+
+
+
+    
+        
+
+
+
