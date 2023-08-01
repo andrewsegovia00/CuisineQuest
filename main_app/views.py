@@ -1,16 +1,20 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Dish
+from django.views.generic import ListView, DetailView
+from .models import Dish, MyList
 import requests
 import webbrowser
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
+
+# Returns Home template
 def home(request):
     return render(request, 'home.html')
 
@@ -35,7 +39,7 @@ def daily_dish(request):
     else:
         return render(request, 'error.html') 
 
-    
+# Returns a detail page for an API dish
 def dishes_list(request):
     api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
 
@@ -50,15 +54,18 @@ def dishes_list(request):
     
     return render(request, 'dishes/dishes.html', {'random_meals': random_meals})
 
+# Returns a detail page for a user created dish
 def dishes_detail(request, dish_id):
     dish = Dish.objects.get(id=dish_id)
     return render(request, 'dishes/detail.html', {'dish': dish})
 
+# Returns a page to view all dishes
 @login_required
 def dishes_index(request):
     dishes = Dish.objects.filter(user=request.user)
     return render(request, 'dishes/index.html', {'dishes': dishes})
 
+# Create a dish w/ CBV
 class DishCreate(LoginRequiredMixin, CreateView):
   model = Dish
   fields = ['name', 'origin', 'description']
@@ -67,15 +74,18 @@ class DishCreate(LoginRequiredMixin, CreateView):
     form.instance.user = self.request.user 
     return super().form_valid(form)
 
+# Updates a dish w/ CBV
 class DishUpdate(LoginRequiredMixin, UpdateView):
     model = Dish
     fields = ['origin', 'description']
     success_url = '/dishes'
 
+# Deletes a dish w/ CBV
 class DishDelete(LoginRequiredMixin, DeleteView):
     model = Dish
     success_url = '/dishes'
 
+# Sign Up function
 def signup(request):
   error_message = ''
   if request.method == 'POST':
@@ -90,3 +100,51 @@ def signup(request):
   form = UserCreationForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
+
+# Returns all dishes in favorites
+class MyListIndex(LoginRequiredMixin, ListView):
+    model = MyList
+
+def mylist_index(request):
+    mylist_exists = MyList.objects.filter(user=request.user).exists()
+    if not mylist_exists:
+        MyList.objects.create(user=request.user)
+    mylist = MyList.objects.filter(user=request.user)
+
+    return render(request, 'main_app/mylist_list.html', {'mylist': mylist})
+
+# # Creates a dishes in favorites
+class MyListCreate(LoginRequiredMixin, CreateView):
+    model = MyList
+    fields = '__all__'
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user 
+        return super().form_valid(form)     
+
+# Returns a Detail view on each dish
+class MyListDetail(LoginRequiredMixin, DetailView):
+    model = MyList
+
+    def get_object(self, queryset=None):
+        dish_id = self.kwargs.get('dish_id')
+        mylist = get_object_or_404(MyList, dish__id=dish_id, user=self.request.user)
+        return mylist
+
+
+# Deletes a dish in favorites
+class MyListDelete(LoginRequiredMixin, DeleteView):
+    model = MyList
+    success_url = '/mylist'
+    # May require a trailing forward dash
+
+@login_required
+def assoc_mylist(request, dish_id):
+  MyList.objects.get(id=request.user.id).dish.add(dish_id)
+  return redirect('mylist_index')
+    # May require a forward dash before myList
+
+@login_required
+def unassoc_mylist(request, dish_id, mylist_id):
+  MyList.objects.get(id=mylist_id).dish.remove(dish_id)
+  return redirect('mylist_index')

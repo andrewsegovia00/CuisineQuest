@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>My List</h1>
+{% for mylist_obj in mylist %}
+<h3>{{ mylist_obj }}</h3>
+{% for dish in mylist_obj.dish.all %}
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">{{ dish.name }}</span>
+        <a href="{% url 'unassoc_mylist' dish.id mylist_obj.id %}">Remove from Favorites</a>
+    </div>
+</div>
+{% endfor %}
+{% endfor %}
+
+{% endblock %}
