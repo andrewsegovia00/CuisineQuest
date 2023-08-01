@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
   <header class="navbar-fixed">
     <nav>
@@ -18,6 +20,7 @@
           <li><a href="/" class="left brand-logo">&nbsp;&nbsp; Home</a></li>
         </ul>
         <ul class="right">
+          <li><a href="{% url 'mylist_index' %}">My Favorites</a></li>
           <li><a href="{% url 'daily_dish' %}">Daily Dish</a></li>
           <li><a href="{% url 'dishes' %}">More Dishes</a></li>
           {% if user.is_authenticated %}
@@ -41,4 +44,5 @@
     <div class="right">All Rights Reserved, &copy; 2023 Cuisine Quest &nbsp;</div>
   </footer>
 </body>
+
 </html>
