@@ -1,4 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1> Home </h1>
+
+<div class="container">
+    <div class="row mainContainer">
+        <div class="col s6">
+            <div class="row textContainer">
+                <div id="hero-text" class="col s12">Nurture your passion for food and life</div>
+                <div class="secondary-text col s12">Torem ipsum dolor sit amet, consectetur adipiscing elit.
+                </div>
+            </div>
+        </div>
+        <div class="col s6">
+            <div class="row">
+                <img class="responsive-img" src="../static/assets/homeGif.png" />
+            </div>
+        </div>
+        <button class="mainBtn">Let's Go!<img class="arrow" src="../static/assets/arrow.png"></button>
+    </div>
+</div>
 {% endblock %}
