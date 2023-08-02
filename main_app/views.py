@@ -93,7 +93,7 @@ def signup(request):
   return render(request, 'registration/signup.html', context)
 
 
-def post_detail(request, food_id):
+def comment_detail(request, food_id):
     dish = get_object_or_404(Dish, id=food_id)
     comments = dish.comments.all()
     new_comment = None
@@ -105,7 +105,7 @@ def post_detail(request, food_id):
             new_comment.post = dish
             new_comment.save()
 
-            return redirect('post_detail', food_id=dish.id)
+            return redirect('comment_detail', food_id=dish.id)
     else:
         comment_form = CommentForm()
 
@@ -117,6 +117,11 @@ def post_detail(request, food_id):
     }
 
     return render(request, 'main_app/comment_form.html', context)
+
+
+class CommentDelete(DeleteView):
+    model = Comment
+    success_url = '/dishes/<int:dish_id>/'
 
 
 
