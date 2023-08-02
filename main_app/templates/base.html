@@ -10,20 +10,25 @@
   <title>Cuisine Quest</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="grey #ffffff white">
   <header class="navbar-fixed">
-    <nav>
+    <nav class="#ffffff white z-depth-0">
       <div class="nav-wrapper">
         <ul>
-          <li><a href="/" class="left brand-logo">&nbsp;&nbsp; Home</a></li>
+          <li><a href="/" class="left brand-logo"><span class="grey-text text-darken-4">CuisineQuest</span></a>
+          </li>
         </ul>
         <ul class="right">
+          {% if user.is_authenticated %}
           <li><a href="{% url 'mylist_index' %}">My Favorites</a></li>
           <li><a href="{% url 'daily_dish' %}">Daily Dish</a></li>
           <li><a href="{% url 'dishes' %}">More Dishes</a></li>
-          {% if user.is_authenticated %}
           <li><a href="{% url 'logout' %}">Log Out</a></li>
           <li><a href="{% url 'dishes_create' %}">Add a Dish</a></li>
           <li><a href="{% url 'index' %}">View All Dishes</a></li>
@@ -36,12 +41,12 @@
       </div>
     </nav>
   </header>
-  <main class="container">
+  <main>
     {% block content %}
     {% endblock %}
   </main>
-  <footer class="page-footer">
-    <div class="right">All Rights Reserved, &copy; 2023 Cuisine Quest &nbsp;</div>
+  <footer class="page-footer #ffffff white">
+    <div class="right ">All Rights Reserved, &copy; 2023 Cuisine Quest &nbsp;</div>
   </footer>
 </body>
 

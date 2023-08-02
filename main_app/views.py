@@ -172,6 +172,7 @@ def remove_from_my_list(request, dish_id):
     api_list.dishes.remove(dish_to_remove)
     return redirect('mylist_index')
 
+@login_required
 def mylist_index(request):
     mylist_exists = MyList.objects.filter(user=request.user).exists()
     if not mylist_exists:

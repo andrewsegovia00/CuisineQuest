@@ -1,0 +1,60 @@
+.brand-logo {}
+
+.left {
+    margin-left: 3rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.right {
+    margin-right: 3rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+nav ul a {
+    color: black;
+    font-size: 1.5rem;
+}
+
+
+#hero-text {
+    color: #6750F3;
+    font-size: 4rem;
+}
+
+.waves-light {
+    border-radius: 10%;
+}
+
+.mainContainer {
+    margin-top: 5rem;
+}
+
+.secondary-text {
+    color: black;
+    font-size: 2rem;
+    font-weight: lighter;
+}
+
+#mainImg {
+    width: 40rem;
+    height: auto;
+}
+
+.mainBtn {
+    border: none;
+    background-color: #6750F3;
+    width: auto;
+    height: 4rem;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.5rem;
+    padding: 1.5rem;
+    padding-left: 1.8rem;
+    padding-right: 1.8rem;
+    text-align: center;
+}
+
+.arrow {
+    margin-left: .8rem;
+}
