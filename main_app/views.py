@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Dish, MyList
+from .models import Dish, MyList, APIDish, APIList
 import requests
 import webbrowser
 from django.contrib.auth import login
@@ -105,13 +105,6 @@ def signup(request):
 class MyListIndex(LoginRequiredMixin, ListView):
     model = MyList
 
-def mylist_index(request):
-    mylist_exists = MyList.objects.filter(user=request.user).exists()
-    if not mylist_exists:
-        MyList.objects.create(user=request.user)
-    mylist = MyList.objects.filter(user=request.user)
-
-    return render(request, 'main_app/mylist_list.html', {'mylist': mylist})
 
 # # Creates a dishes in favorites
 class MyListCreate(LoginRequiredMixin, CreateView):
@@ -148,3 +141,46 @@ def assoc_mylist(request, dish_id):
 def unassoc_mylist(request, dish_id, mylist_id):
   MyList.objects.get(id=mylist_id).dish.remove(dish_id)
   return redirect('mylist_index')
+
+def add_to_my_list(request, dish_name):
+    if request.method == 'POST':
+        user = request.user
+        api_list, _ = APIList.objects.get_or_create(user=user)
+
+        api_url = f"https://www.themealdb.com/api/json/v1/1/search.php?s={dish_name}"
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            if data['meals']:
+                dish = data['meals'][0]
+                dish_name = dish['strMeal']
+                dish_picture_url = dish['strMealThumb']
+
+                apidish, created = APIDish.objects.get_or_create(name=dish_name, picture=dish_picture_url)
+
+                api_list.dishes.add(apidish)
+                return redirect('mylist_index')
+
+    return redirect('daily_dish')
+
+def remove_from_my_list(request, dish_id):
+    user = request.user
+    api_list, created = APIList.objects.get_or_create(user=user)
+
+    dish_to_remove = get_object_or_404(APIDish, id=dish_id)
+
+    api_list.dishes.remove(dish_to_remove)
+    return redirect('mylist_index')
+
+def mylist_index(request):
+    mylist_exists = MyList.objects.filter(user=request.user).exists()
+    if not mylist_exists:
+        MyList.objects.create(user=request.user)
+    mylist = MyList.objects.filter(user=request.user)
+
+    user = request.user
+    api_list, created = APIList.objects.get_or_create(user=user)
+
+    favorite_dishes = api_list.dishes.all()
+
+    return render(request, 'main_app/mylist_list.html', {'mylist': mylist, 'favorite_dishes': favorite_dishes})
