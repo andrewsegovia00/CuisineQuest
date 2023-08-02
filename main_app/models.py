@@ -21,7 +21,7 @@ class Dish(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Dish,on_delete=models.CASCADE,related_name='comments')    
-    name = models.CharField(max_length=80)    
+    name = models.CharField(max_length=80, verbose_name='Username')    
     email = models.EmailField()    
     body = models.TextField()    
     created_on = models.DateTimeField(auto_now_add=True)    
