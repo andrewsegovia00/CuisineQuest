@@ -14,4 +14,16 @@
 {% endfor %}
 {% endfor %}
 
+    {% for dish in favorite_dishes %}
+
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ dish.name }}</span>
+            <img src="{{ dish.picture }}" alt="{{ dish.name }}" width="400" height="400">
+            <br>
+            <a href="{% url 'remove_from_my_list' dish.id %}">Remove from Favorites</a>
+        </div>
+    </div>
+    {% endfor %}
+
 {% endblock %}
