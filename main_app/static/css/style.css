@@ -14,3 +14,15 @@ footer.page-footer {
   text-align: right;
   color: black;
 }
+
+form {
+  display: inline; 
+}
+
+.heart-icon {
+  cursor: pointer;
+}
+
+.add-button {
+  display: none;
+}

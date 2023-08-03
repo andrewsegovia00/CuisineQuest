@@ -1,11 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-<a href="{% url 'daily_dish' %}">Refresh</a>
+<a href="{% url 'daily_dish' %}">
+    <button type="button">
+        <i class="fa fa-refresh fa-spin" style="font-size: 30px"></i>
+      </button>
+</a>
 <h1>{{ dish_name }}</h1>
 <img src="{{ dish_picture_url }}" alt="{{ dish_name }}">
-<form action="{% url 'add_to_my_list' dish_name %}" method="post">
+<form id="addToListForm" action="{% url 'add_to_my_list' dish_name %}" method="post">
     {% csrf_token %}
-    <input type="submit" value="+" />
+    <input type="submit" value="+" class="add-button" style="display: none;">
+    <span class="heart-icon" style="font-size: 48px; color: red; cursor: pointer;">&#9829;</span>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const heartIcon = document.querySelector('.heart-icon');
+        const addToListForm = document.getElementById('addToListForm');
+
+        heartIcon.addEventListener('click', function() {
+            addToListForm.submit();
+        });
+    });
+</script>
 
 {% endblock %}
