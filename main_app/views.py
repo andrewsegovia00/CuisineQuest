@@ -16,6 +16,7 @@ from django.urls import reverse_lazy
 import os
 
 
+
 # Returns Home template
 def home(request):
     return render(request, 'home.html')
