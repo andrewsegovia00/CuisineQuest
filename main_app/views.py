@@ -139,7 +139,9 @@ class CommentUpdateView(UpdateView):
 
 class CommentDeleteView(DeleteView):
     model = Comment
-    success_url = reverse_lazy('comment_detail')
+    def get_success_url(self):
+        food_id = self.object.dish_id.id
+        return reverse_lazy('comment_detail', kwargs={'food_id': food_id})
 
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):
