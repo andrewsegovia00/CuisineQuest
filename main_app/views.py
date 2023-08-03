@@ -12,10 +12,6 @@ from .forms import CommentForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
-
-
-# Create your views here.
-
 # Returns Home template
 def home(request):
     return render(request, 'home.html')
@@ -135,12 +131,17 @@ def comment_detail(request, food_id):
 
 class CommentUpdateView(UpdateView):
     model = Comment
-    fields = ['city_name', 'restarant_name', 'body']
+    fields = ['city_name', 'restaurant_name', 'body']
+    # success_url = reverse_lazy('detail')
+    success_url = '/dishes'
+
+
+
   
 
 class CommentDeleteView(DeleteView):
     model = Comment
-    success_url = reverse_lazy('comment_detail')
+    success_url = reverse_lazy('detail')
 
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):
@@ -148,13 +149,13 @@ class MyListIndex(LoginRequiredMixin, ListView):
 
 
 # # Creates a dishes in favorites
-class MyListCreate(LoginRequiredMixin, CreateView):
-    model = MyList
-    fields = '__all__'
-    
-    def form_valid(self, form):
-        form.instance.user = self.request.user 
-        return super().form_valid(form)     
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields = ['city_name', 'restaurant_name', 'body']
+
+    def get_success_url(self):
+        dish_id = self.object.dish.id if self.object.dish else None
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})    
 
 # Returns a Detail view on each dish
 class MyListDetail(LoginRequiredMixin, DetailView):
