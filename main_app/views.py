@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
 
-
 # Create your views here.
 
 # Returns Home template
