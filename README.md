@@ -24,3 +24,17 @@
 
 #### Sign Up
 ![Sign Page](/main_app/static/assets/SignUp.png)
+
+## Set Up
+
+Clone repo
+
+Install 'requests'
+pip3 install requests
+
+then run python3 manage.py makemigrations
+
+then run the comment python3 manage.py migrate
+
+finally, run the program locally
+python3 manage.py runserver
