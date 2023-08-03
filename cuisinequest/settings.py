@@ -1,5 +1,11 @@
 import os
 from dotenv import load_dotenv
+
+from pathlib import Path
+import environ
+
+environ.Env()
+environ.Env.read_env()
 """
 Django settings for cuisinequest project.
 
