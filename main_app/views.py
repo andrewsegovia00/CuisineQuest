@@ -120,6 +120,18 @@ class CommentCreateView(CreateView):
 class CommentUpdateView(UpdateView):
     model = Comment
     fields = ['city_name', 'restaurant_name', 'body']
+    # success_url = '/mylist'
+
+    def form_valid(self, form):
+        dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
+        form.instance.dish_id = dish
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        dish_id = self.kwargs['pk']
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})
+
   
 class CommentDeleteView(DeleteView):
     model = Comment
