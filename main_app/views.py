@@ -12,13 +12,11 @@ from .forms import CommentForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
-
-# Create your views here.
-
 # Returns Home template
 def home(request):
     return render(request, 'home.html')
 
+# Returns random daily dish
 def daily_dish(request):
     api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
 
@@ -61,8 +59,6 @@ def dishes_detail(request, dish_id):
     comments = Comment.objects.filter(dish_id=dish_id)
     print(comments)
     return render(request, 'dishes/detail.html', {'dish': dish,'comments': comments})
-    
-    
 
 # Returns a page to view all dishes
 @login_required
@@ -106,49 +102,40 @@ def signup(request):
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
 
-def comment_detail(request, food_id):
-    dish = get_object_or_404(Dish, id=food_id)
-    comments = dish.comments.all()
-    new_comment = None
+class CommentCreateView(CreateView):
+    model = Comment
+    fields = ['city_name', 'restaurant_name', 'body']
 
-    if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.dish_id = dish
-            new_comment.save()
+    def form_valid(self, form):
+        dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
+        form.instance.dish_id = dish
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
-            return redirect('detail', dish_id=dish.id)
-    else:
-        comment_form = CommentForm()
+    def get_success_url(self):
+        dish_id = self.kwargs['pk']
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})
 
-    context = {
-        'dish': dish,
-        'comments': comments,
-        'new_comment': new_comment,
-        'comment_form': comment_form,
-    }
-
-    return render(request, 'main_app/comment_form.html', context)
-
-
+# Updates Comments
 class CommentUpdateView(UpdateView):
     model = Comment
     fields = ['city_name', 'restaurant_name', 'body']
   
-
 class CommentDeleteView(DeleteView):
     model = Comment
+
     def get_success_url(self):
-        food_id = self.object.dish_id.id
-        return reverse_lazy('detail', kwargs={'dish_id': food_id})
+        dish_id = self.object.dish_id.id
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})
+
+
 
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):
     model = MyList
 
 
-# # Creates a dishes in favorites
+# # Creates a dish in favorites
 class MyListCreate(LoginRequiredMixin, CreateView):
     model = MyList
     fields = '__all__'
@@ -156,6 +143,7 @@ class MyListCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user 
         return super().form_valid(form)     
+
 
 # Returns a Detail view on each dish
 class MyListDetail(LoginRequiredMixin, DetailView):
@@ -171,19 +159,19 @@ class MyListDetail(LoginRequiredMixin, DetailView):
 class MyListDelete(LoginRequiredMixin, DeleteView):
     model = MyList
     success_url = '/mylist'
-    # May require a trailing forward dash
+
 
 @login_required
 def assoc_mylist(request, dish_id):
   MyList.objects.get(id=request.user.id).dish.add(dish_id)
   return redirect('mylist_index')
-    # May require a forward dash before myList
 
 @login_required
 def unassoc_mylist(request, dish_id, mylist_id):
   MyList.objects.get(id=mylist_id).dish.remove(dish_id)
   return redirect('mylist_index')
 
+@login_required
 def add_to_my_list(request, dish_name):
     if request.method == 'POST':
         user = request.user
@@ -205,6 +193,7 @@ def add_to_my_list(request, dish_name):
 
     return redirect('daily_dish')
 
+@login_required
 def remove_from_my_list(request, dish_id):
     user = request.user
     api_list, created = APIList.objects.get_or_create(user=user)

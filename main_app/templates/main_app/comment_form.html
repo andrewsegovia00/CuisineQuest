@@ -1,8 +1,7 @@
-
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="container">  
+<div class="container">
     <div class="row">
         <div class="col-md-8 card mb-4 mt-3">
             <div class="card-body">
@@ -12,9 +11,11 @@
                 </div>
                 {% endif %}
                 <h3>Leave a comment</h3>
-                <form method="post" style="margin-top: 1.3em;">
-                    {{ comment_form.as_p }}
+                <form action="" method="POST">
                     {% csrf_token %}
+                    <table>
+                        {{ form.as_table }}
+                    </table>
                     <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                 </form>
             </div>
@@ -23,4 +24,3 @@
 </div>
 
 {% endblock content %}
-
