@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 """
 Django settings for cuisinequest project.
 
