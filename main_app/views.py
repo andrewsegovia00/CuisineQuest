@@ -1,15 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Dish, MyList, APIDish, APIList
+from .models import Dish, MyList, APIDish, APIList, Comment
 import requests
 import webbrowser
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CommentForm
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -57,7 +57,11 @@ def dishes_list(request):
 # Returns a detail page for a user created dish
 def dishes_detail(request, dish_id):
     dish = Dish.objects.get(id=dish_id)
-    return render(request, 'dishes/detail.html', {'dish': dish})
+    comments = Comment.objects.filter(dish_id=dish_id)
+    print(comments)
+    return render(request, 'dishes/detail.html', {'dish': dish,'comments': comments})
+    
+    
 
 # Returns a page to view all dishes
 @login_required
@@ -100,6 +104,41 @@ def signup(request):
   form = UserCreationForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
+
+def comment_detail(request, food_id):
+    dish = get_object_or_404(Dish, id=food_id)
+    comments = dish.comments.all()
+    new_comment = None
+
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.dish_id = dish
+            new_comment.save()
+
+            return redirect('detail', dish_id=dish.id)
+    else:
+        comment_form = CommentForm()
+
+    context = {
+        'dish': dish,
+        'comments': comments,
+        'new_comment': new_comment,
+        'comment_form': comment_form,
+    }
+
+    return render(request, 'main_app/comment_form.html', context)
+
+
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields = ['city_name', 'restarant_name', 'body']
+  
+
+class CommentDeleteView(DeleteView):
+    model = Comment
+    success_url = reverse_lazy('comment_detail')
 
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):

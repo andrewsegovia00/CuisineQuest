@@ -26,6 +26,9 @@ urlpatterns = [
     path('dishes/<int:dish_id>/unassoc_mylist/<int:mylist_id>/', views.unassoc_mylist, name='unassoc_mylist'),
     # Sign up route
     path('accounts/signup/', views.signup, name='signup'),
+    path('<int:food_id>/', views.comment_detail, name='comment_detail'),
+    path('comments/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment_update'),
+    path('comments/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment_delete'),
     # API Dish mylist
     path('add_to_favorites/<str:dish_name>/', views.add_to_my_list, name='add_to_my_list'),
     path('remove_from_favorites/<int:dish_id>/', views.remove_from_my_list, name='remove_from_my_list'),
