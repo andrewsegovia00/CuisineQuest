@@ -44,18 +44,40 @@ def daily_dish(request):
 
 # Returns a detail page for an API dish
 def dishes_list(request):
-    api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
+    api_url = "https://www.themealdb.com/api/json/v1/1/categories.php"
+    response = requests.get(api_url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        categories = [category['strCategory'] for category in data['categories']]
+    else:
+        categories = []
 
-    random_meals = []
+    selected_category = request.GET.get('category')
 
-    for _ in range(4):
-        response = requests.get(api_url)
+    if selected_category:
+        selected_api_url = f"https://www.themealdb.com/api/json/v1/1/filter.php?c={selected_category}"
+        response = requests.get(selected_api_url)
+        
         if response.status_code == 200:
             data = response.json()
-            random_meal = data['meals'][0]
-            random_meals.append(random_meal)
-    
-    return render(request, 'dishes/dishes.html', {'random_meals': random_meals})
+            random_meals = data['meals'][:4]
+        else:
+            random_meals = []
+    else:
+        # Fetch four random meals from the API as the default list
+        random_api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
+        random_meals = []
+        for _ in range(4):
+            response = requests.get(random_api_url)
+            if response.status_code == 200:
+                data = response.json()
+                random_meal = data['meals'][0]
+                random_meals.append(random_meal)
+            else:
+                break
+
+    return render(request, 'dishes/dishes.html', {'categories': categories, 'selected_category': selected_category, 'random_meals': random_meals})
 
 # Returns a detail page for a user created dish
 def dishes_detail(request, dish_id):
