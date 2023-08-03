@@ -65,3 +65,11 @@ class APIList(models.Model):
 
     def __str__(self):
         return f"{self.user}'s List"
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Photo for dish_id: {self.dish_id} @{self.url}"
+    

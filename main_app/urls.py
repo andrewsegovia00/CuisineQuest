@@ -31,9 +31,11 @@ urlpatterns = [
     # Create comments
     path('dish/comment/<int:pk>/', views.CommentCreateView.as_view(), name='create_comment'),
     # Update comments
-    path('dish/comment/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment_update'),
+    path('dish/<int:id>/comment/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment_update'),
     # Delete comments
     path('dish/comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment_delete'),
+    # Add photo route
+    path('dish/<int:dish_id>/add_photo/', views.add_photo, name='add_photo'),
     # Sign up route
     path('accounts/signup/', views.signup, name='signup'),
 ]
