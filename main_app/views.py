@@ -134,7 +134,7 @@ def comment_detail(request, food_id):
 
 class CommentUpdateView(UpdateView):
     model = Comment
-    fields = ['city_name', 'restarant_name', 'body']
+    fields = ['city_name', 'restaurant_name', 'body']
   
 
 class CommentDeleteView(DeleteView):
