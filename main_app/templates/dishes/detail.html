@@ -32,14 +32,15 @@
       <p>
         {{ comment.body }}
       </p>
-      {% if user.is_authenticated and user == comment.user_profile.user %}
-      <a href="{% url 'comment_delete' comment.pk %}">Delete</a>
-      {% endif %}
+      <!-- {% if user.is_authenticated and user == comment.user_profile.user %} -->
+      <!-- {% endif %} -->
     </div>
+    <a href="{% url 'comment_delete' comment.pk %}">Delete Comment</a>
+    <a href="{% url 'comment_update' comment.pk %}">Update Comment</a>
       {% endfor %}
 
-
       {% endif %}
+
     </div>
     
     {% endblock %}
