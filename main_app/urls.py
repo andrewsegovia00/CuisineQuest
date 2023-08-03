@@ -28,14 +28,12 @@ urlpatterns = [
     # API Dish mylist
     path('add_to_favorites/<str:dish_name>/', views.add_to_my_list, name='add_to_my_list'),
     path('remove_from_favorites/<int:dish_id>/', views.remove_from_my_list, name='remove_from_my_list'),
-    
     # Create comments
     path('dish/comment/<int:pk>/', views.CommentCreateView.as_view(), name='create_comment'),
     # Update comments
     path('dish/comment/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment_update'),
     # Delete comments
     path('dish/comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment_delete'),
-
     # Sign up route
     path('accounts/signup/', views.signup, name='signup'),
 ]
