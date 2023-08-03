@@ -243,7 +243,7 @@ def add_photo(request, dish_id):
             bucket = os.environ['S3_BUCKET']
             s3.upload_fileobj(photo_file, bucket, key)
             url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
-            Photo.objects.create(url=url, cat_id=cat_id)
+            Photo.objects.create(url=url, dish_id=dish_id)
         except Exception as e:
             print('An error occurred uploading file to S3')
             print(e)
