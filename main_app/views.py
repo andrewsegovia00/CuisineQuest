@@ -102,6 +102,7 @@ def signup(request):
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
 
+#Creates Comment
 class CommentCreateView(CreateView):
     model = Comment
     fields = ['city_name', 'restaurant_name', 'body']
@@ -120,7 +121,6 @@ class CommentCreateView(CreateView):
 class CommentUpdateView(UpdateView):
     model = Comment
     fields = ['city_name', 'restaurant_name', 'body']
-    # success_url = '/mylist'
 
     def form_valid(self, form):
         dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
@@ -133,6 +133,7 @@ class CommentUpdateView(UpdateView):
         return reverse_lazy('detail', kwargs={'dish_id': dish_id})
 
   
+# Deletes comment
 class CommentDeleteView(DeleteView):
     model = Comment
 
