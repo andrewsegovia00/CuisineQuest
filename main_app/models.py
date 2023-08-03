@@ -5,6 +5,13 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.full_name
+
 class Dish(models.Model):
     name = models.CharField(max_length=100)
     origin = models.CharField(max_length=100)
@@ -20,9 +27,9 @@ class Dish(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Dish,on_delete=models.CASCADE,related_name='comments')    
-    name = models.CharField(max_length=80, verbose_name='Username')    
-    email = models.EmailField()    
+    dish_id = models.ForeignKey(Dish,on_delete=models.CASCADE,related_name='comments')    
+    city_name = models.CharField(max_length=80, verbose_name='City', default='')    
+    restaurant_name = models.CharField(max_length=100, verbose_name='Restaurant Name', default='')
     body = models.TextField()    
     created_on = models.DateTimeField(auto_now_add=True)    
         
@@ -32,6 +39,6 @@ class Comment(models.Model):
     
     
     def __str__(self):        
-        return 'Comment {} by {}'.format(self.body, self.name)
+        return 'Comment {} by {}'.format(self.body, self.dish_id)
 
-   
+    

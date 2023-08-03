@@ -12,4 +12,6 @@ urlpatterns = [
     path('dishes/<int:pk>/delete/', views.DishDelete.as_view(), name='dishes_delete'),
     path('accounts/signup/', views.signup, name='signup'),
     path('<int:food_id>/', views.comment_detail, name='comment_detail'),
+    path('comments/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment_update'),
+    path('comments/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment_delete'),
 ]

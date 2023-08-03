@@ -8,6 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CommentForm
+from django.urls import reverse_lazy
 
 
 
@@ -53,7 +54,11 @@ def dishes_list(request):
 
 def dishes_detail(request, dish_id):
     dish = Dish.objects.get(id=dish_id)
-    return render(request, 'dishes/detail.html', {'dish': dish})
+    comments = Comment.objects.filter(dish_id=dish_id)
+    print(comments)
+    return render(request, 'dishes/detail.html', {'dish': dish,'comments': comments})
+    
+    
 
 @login_required
 def dishes_index(request):
@@ -93,6 +98,9 @@ def signup(request):
   return render(request, 'registration/signup.html', context)
 
 
+
+
+
 def comment_detail(request, food_id):
     dish = get_object_or_404(Dish, id=food_id)
     comments = dish.comments.all()
@@ -102,10 +110,10 @@ def comment_detail(request, food_id):
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
-            new_comment.post = dish
+            new_comment.dish_id = dish
             new_comment.save()
 
-            return redirect('comment_detail', food_id=dish.id)
+            return redirect('detail', dish_id=dish.id)
     else:
         comment_form = CommentForm()
 
@@ -119,9 +127,19 @@ def comment_detail(request, food_id):
     return render(request, 'main_app/comment_form.html', context)
 
 
-class CommentDelete(DeleteView):
+class CommentUpdateView(UpdateView):
     model = Comment
-    success_url = '/dishes/<int:dish_id>/'
+    fields = ['city_name', 'restarant_name', 'body']
+  
+
+class CommentDeleteView(DeleteView):
+    model = Comment
+    success_url = reverse_lazy('comment_detail')
+
+    
+
+
+
 
 
 

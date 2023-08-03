@@ -12,9 +12,37 @@
     <div class="card-action">
         <a href="{% url 'dishes_update' dish.id %}">Edit</a>
         <a href="{% url 'dishes_delete' dish.id %}">Delete</a>
-        <a href="{% url 'comment_detail' food_id=dish.id %}">Comment</a>
-         
-      </div>
-  </div>
+    </div>  
+    <a href="{% url 'comment_detail' food_id=dish.id %}">Comment</a>
+    {% if comments %} 
+    <h2>Comments:</h2>
+    {% for comment in comments %}
+    <div class=" comment ">
+      <p><strong>
+       {{ comment.created_on }}
+      </strong>
+      </p>
+      <p>
+        City:{{ comment.city_name }} 
+      </p>
+      <p>
+        Restaurant: {{ comment.restaurant_name }}
+      </p>
+      <p>
+        {{ comment.body }}
+      </p>
+      {% if user.is_authenticated and user == comment.user_profile.user %}
+      <a href="{% url 'comment_delete' comment.pk %}">Delete</a>
+      {% endif %}
+    </div>
+      {% endfor %}
 
-{% endblock %}
+
+      {% endif %}
+    </div>
+    
+    {% endblock %}
+
+   
+  
+
