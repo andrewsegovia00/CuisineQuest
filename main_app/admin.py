@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Dish, Comment
+from .models import Dish, Comment, MyList
 
 
 # Register your models here.
