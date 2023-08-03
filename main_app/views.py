@@ -134,12 +134,14 @@ def comment_detail(request, food_id):
 
 class CommentUpdateView(UpdateView):
     model = Comment
-    fields = ['city_name', 'restarant_name', 'body']
+    fields = ['city_name', 'restaurant_name', 'body']
   
 
 class CommentDeleteView(DeleteView):
     model = Comment
-    success_url = reverse_lazy('comment_detail')
+    def get_success_url(self):
+        food_id = self.object.dish_id.id
+        return reverse_lazy('detail', kwargs={'dish_id': food_id})
 
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):
