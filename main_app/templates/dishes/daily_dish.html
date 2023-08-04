@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<a href="{% url 'daily_dish' %}">
-    <button type="button">
-        <i class="fa fa-refresh fa-spin" style="font-size: 30px"></i>
-      </button>
-</a>
-<h1>{{ dish_name }}</h1>
-<img src="{{ dish_picture_url }}" alt="{{ dish_name }}">
-<form id="addToListForm" action="{% url 'add_to_my_list' dish_name %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="+" class="add-button" style="display: none;">
-    <span class="heart-icon" style="font-size: 48px; color: red; cursor: pointer;">&#9829;</span>
-</form>
+<div id="card-container">
+<div id="dish-card">
+    <a href="{% url 'daily_dish' %}">
+        <button type="button" class="refresh-button">
+            <i class="fa fa-refresh fa-spin" style="font-size: 30px"></i>
+        </button>
+    </a>
+    <h3>{{ dish_name }}</h3>
+    <img src="{{ dish_picture_url }}" alt="{{ dish_name }}">
+    <form id="addToListForm" action="{% url 'add_to_my_list' dish_name %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="+" class="add-button" style="display: none;">
+        <span class="heart-icon" id="daily-heart">
+            <i class="fa fa-heart-o"></i>
+        </span>
+    </form>
+</div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -22,6 +28,19 @@
             addToListForm.submit();
         });
     });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  $(".heart-icon").on("mouseenter", function() {
+    $(this).find("i").removeClass("fa-heart-o").addClass("fa-heart");
+  });
+
+  $(".heart-icon").on("mouseleave", function() {
+    $(this).find("i").removeClass("fa-heart").addClass("fa-heart-o");
+  });
+});
 </script>
 
 {% endblock %}
