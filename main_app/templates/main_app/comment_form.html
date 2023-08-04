@@ -14,26 +14,4 @@
     </table>
     <input type="submit" value="Submit!" class="btn">
 </form>
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 card mb-4 mt-3">
-            <div class="card-body">
-                {% if new_comment %}
-                <div class="alert alert-success" role="alert">
-                    Your comment is cooking
-                </div>
-                {% endif %}
-                <h3>Leave a comment</h3>
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <table>
-                        {{ form.as_table }}
-                    </table>
-                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div>
-   
-</div>
 {% endblock content %}
