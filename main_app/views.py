@@ -1,23 +1,25 @@
-from django.shortcuts import render, redirect
+import uuid
+import boto3
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Dish, MyList, APIDish, APIList
+from .models import Dish, MyList, APIDish, APIList, Comment, Photo
 import requests
 import webbrowser
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CommentForm
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
-
-
-# Create your views here.
+from django.urls import reverse_lazy
+import os
 
 # Returns Home template
 def home(request):
     return render(request, 'home.html')
 
+# Returns random daily dish
 def daily_dish(request):
     api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
 
@@ -41,23 +43,47 @@ def daily_dish(request):
 
 # Returns a detail page for an API dish
 def dishes_list(request):
-    api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
+    api_url = "https://www.themealdb.com/api/json/v1/1/categories.php"
+    response = requests.get(api_url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        categories = [category['strCategory'] for category in data['categories']]
+    else:
+        categories = []
 
-    random_meals = []
+    selected_category = request.GET.get('category')
 
-    for _ in range(4):
-        response = requests.get(api_url)
+    if selected_category:
+        selected_api_url = f"https://www.themealdb.com/api/json/v1/1/filter.php?c={selected_category}"
+        response = requests.get(selected_api_url)
+        
         if response.status_code == 200:
             data = response.json()
-            random_meal = data['meals'][0]
-            random_meals.append(random_meal)
-    
-    return render(request, 'dishes/dishes.html', {'random_meals': random_meals})
+            random_meals = data['meals'][:4]
+        else:
+            random_meals = []
+    else:
+        # Fetch four random meals from the API as the default list
+        random_api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
+        random_meals = []
+        for _ in range(4):
+            response = requests.get(random_api_url)
+            if response.status_code == 200:
+                data = response.json()
+                random_meal = data['meals'][0]
+                random_meals.append(random_meal)
+            else:
+                break
+
+    return render(request, 'dishes/dishes.html', {'categories': categories, 'selected_category': selected_category, 'random_meals': random_meals})
 
 # Returns a detail page for a user created dish
 def dishes_detail(request, dish_id):
     dish = Dish.objects.get(id=dish_id)
-    return render(request, 'dishes/detail.html', {'dish': dish})
+    comments = Comment.objects.filter(dish_id=dish_id)
+    print(comments)
+    return render(request, 'dishes/detail.html', {'dish': dish,'comments': comments})
 
 # Returns a page to view all dishes
 @login_required
@@ -101,12 +127,63 @@ def signup(request):
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
 
+#Creates Comment
+class CommentCreateView(CreateView):
+    model = Comment
+    fields = ['city_name', 'restaurant_name', 'body']
+
+    def form_valid(self, form):
+        dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
+        form.instance.dish_id = dish
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        dish_id = self.kwargs['pk']
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})
+
+# Updates Comments
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields = ['city_name', 'restaurant_name', 'body']
+    # success_url = reverse_lazy('detail')
+    success_url = '/dishes'
+    def form_valid(self, form):
+        dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
+        form.instance.dish_id = dish
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    def get_success_url(self):
+        dish_id = self.kwargs['id']
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})
+  
+# Deletes comment
+class CommentDeleteView(DeleteView):
+    model = Comment
+    success_url = reverse_lazy('detail')
+
+
+    def get_success_url(self):
+        dish_id = self.object.dish_id.id
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})
+
+
+
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):
     model = MyList
 
 
 # # Creates a dishes in favorites
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields = ['city_name', 'restaurant_name', 'body']
+
+    def get_success_url(self):
+        dish_id = self.object.dish.id if self.object.dish else None
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})    
+
+# # Creates a dish in favorites
 class MyListCreate(LoginRequiredMixin, CreateView):
     model = MyList
     fields = '__all__'
@@ -129,19 +206,19 @@ class MyListDetail(LoginRequiredMixin, DetailView):
 class MyListDelete(LoginRequiredMixin, DeleteView):
     model = MyList
     success_url = '/mylist'
-    # May require a trailing forward dash
+
 
 @login_required
 def assoc_mylist(request, dish_id):
   MyList.objects.get(id=request.user.id).dish.add(dish_id)
   return redirect('mylist_index')
-    # May require a forward dash before myList
 
 @login_required
 def unassoc_mylist(request, dish_id, mylist_id):
   MyList.objects.get(id=mylist_id).dish.remove(dish_id)
   return redirect('mylist_index')
 
+@login_required
 def add_to_my_list(request, dish_name):
     if request.method == 'POST':
         user = request.user
@@ -163,6 +240,7 @@ def add_to_my_list(request, dish_name):
 
     return redirect('daily_dish')
 
+@login_required
 def remove_from_my_list(request, dish_id):
     user = request.user
     api_list, created = APIList.objects.get_or_create(user=user)
@@ -185,3 +263,19 @@ def mylist_index(request):
     favorite_dishes = api_list.dishes.all()
 
     return render(request, 'main_app/mylist_list.html', {'mylist': mylist, 'favorite_dishes': favorite_dishes})
+
+
+def add_photo(request, dish_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            bucket = os.environ['S3_BUCKET']
+            s3.upload_fileobj(photo_file, bucket, key)
+            url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+            Photo.objects.create(url=url, dish_id=dish_id)
+        except Exception as e:
+            print('An error occurred uploading file to S3')
+            print(e)
+    return redirect('detail', dish_id=dish_id)
