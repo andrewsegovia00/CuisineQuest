@@ -12,7 +12,7 @@
     <form id="addToListForm" action="{% url 'add_to_my_list' dish_name %}" method="post">
         {% csrf_token %}
         <input type="submit" value="+" class="add-button" style="display: none;">
-        <span class="heart-icon">
+        <span class="heart-icon" id="daily-heart">
             <i class="fa fa-heart-o"></i>
         </span>
     </form>
