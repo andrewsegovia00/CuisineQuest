@@ -1,3 +1,4 @@
+import os
 import uuid
 import boto3
 from django.shortcuts import render, redirect, get_object_or_404
@@ -13,7 +14,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CommentForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-import os
 
 
 # Returns Home template
@@ -233,7 +233,7 @@ def mylist_index(request):
 
     return render(request, 'main_app/mylist_list.html', {'mylist': mylist, 'favorite_dishes': favorite_dishes})
 
-
+@login_required
 def add_photo(request, dish_id):
     photo_file = request.FILES.get('photo-file', None)
     if photo_file:
