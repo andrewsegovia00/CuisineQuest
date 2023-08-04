@@ -1,6 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Random Dishes</h1>
+
+
+    <form id="tags" method="get" action="{% url 'dishes' %}">
+        <a href="?category=Beef" id="beef">Beef</a>
+        <a href="?category=Chicken" id="chicken">Chicken</a>
+        <a href="?category=Dessert" id="dessert">Dessert</a>
+        <a href="?category=Lamb" id="lamb">Lamb</a>
+        <a href="?category=Miscellaneous" id="miscellaneous">Miscellaneous</a>
+        <a href="?category=Pasta" id="pasta">Pasta</a>
+        <a href="?category=Pork" id="pork">Pork</a>
+        <a href="?category=Seafood" id="seafood">Seafood</a>
+        <a href="?category=Side" id="side">Side</a>
+        <a href="?category=Starter" id="starter">Starter</a>
+        <a href="?category=Vegan" id="vegan">Vegan</a>
+        <a href="?category=Vegetarian" id="vegetarian">Vegetarian</a>
+        <a href="?category=Breakfast" id="breakfast">Breakfast</a>
+        <a href="?category=Goat" id="goat">Goat</a>
+    </form>
+
     <ul>
         {% for meal in random_meals %}
         <li>
@@ -9,4 +28,6 @@
         </li>
         {% endfor %}
     </ul>
+
+   
 {% endblock %}

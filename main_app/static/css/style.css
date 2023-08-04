@@ -27,7 +27,6 @@ form {
   display: none;
 }
 
-
 #commentContainer {
   border-radius: 25px;
   -webkit-transition: -webkit-box-shadow .25s;
@@ -56,4 +55,7 @@ form {
 
 #hidden {
   display: none;
+}
+#tags{
+  font-size: 20px;
 }

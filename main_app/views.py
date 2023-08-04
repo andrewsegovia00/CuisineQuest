@@ -15,7 +15,6 @@ from .forms import CommentForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
-
 # Returns Home template
 def home(request):
     return render(request, 'home.html')
@@ -44,18 +43,40 @@ def daily_dish(request):
 
 # Returns a detail page for an API dish
 def dishes_list(request):
-    api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
+    api_url = "https://www.themealdb.com/api/json/v1/1/categories.php"
+    response = requests.get(api_url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        categories = [category['strCategory'] for category in data['categories']]
+    else:
+        categories = []
 
-    random_meals = []
+    selected_category = request.GET.get('category')
 
-    for _ in range(4):
-        response = requests.get(api_url)
+    if selected_category:
+        selected_api_url = f"https://www.themealdb.com/api/json/v1/1/filter.php?c={selected_category}"
+        response = requests.get(selected_api_url)
+        
         if response.status_code == 200:
             data = response.json()
-            random_meal = data['meals'][0]
-            random_meals.append(random_meal)
-    
-    return render(request, 'dishes/dishes.html', {'random_meals': random_meals})
+            random_meals = data['meals'][:4]
+        else:
+            random_meals = []
+    else:
+        # Fetch four random meals from the API as the default list
+        random_api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
+        random_meals = []
+        for _ in range(4):
+            response = requests.get(random_api_url)
+            if response.status_code == 200:
+                data = response.json()
+                random_meal = data['meals'][0]
+                random_meals.append(random_meal)
+            else:
+                break
+
+    return render(request, 'dishes/dishes.html', {'categories': categories, 'selected_category': selected_category, 'random_meals': random_meals})
 
 # Returns a detail page for a user created dish
 def dishes_detail(request, dish_id):
@@ -125,13 +146,13 @@ class CommentCreateView(CreateView):
 class CommentUpdateView(UpdateView):
     model = Comment
     fields = ['city_name', 'restaurant_name', 'body']
-
+    # success_url = reverse_lazy('detail')
+    success_url = '/dishes'
     def form_valid(self, form):
-        dish = get_object_or_404(Dish, pk=self.kwargs['id'])
+        dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
         form.instance.dish_id = dish
         form.instance.user = self.request.user
         return super().form_valid(form)
-
     def get_success_url(self):
         dish_id = self.kwargs['id']
         return reverse_lazy('detail', kwargs={'dish_id': dish_id})
@@ -139,6 +160,8 @@ class CommentUpdateView(UpdateView):
 # Deletes comment
 class CommentDeleteView(DeleteView):
     model = Comment
+    success_url = reverse_lazy('detail')
+
 
     def get_success_url(self):
         dish_id = self.object.dish_id.id
@@ -151,6 +174,15 @@ class MyListIndex(LoginRequiredMixin, ListView):
     model = MyList
 
 
+# # Creates a dishes in favorites
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields = ['city_name', 'restaurant_name', 'body']
+
+    def get_success_url(self):
+        dish_id = self.object.dish.id if self.object.dish else None
+        return reverse_lazy('detail', kwargs={'dish_id': dish_id})    
+
 # # Creates a dish in favorites
 class MyListCreate(LoginRequiredMixin, CreateView):
     model = MyList
@@ -159,7 +191,6 @@ class MyListCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user 
         return super().form_valid(form)     
-
 
 # Returns a Detail view on each dish
 class MyListDetail(LoginRequiredMixin, DetailView):
