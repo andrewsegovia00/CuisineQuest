@@ -63,11 +63,14 @@ def dishes_list(request):
             random_meals = data['meals'][:4]
         else:
             random_meals = []
+        active_category = selected_category
+    
+
     else:
-        # Fetch four random meals from the API as the default list
+        active_category = "None"
         random_api_url = "https://www.themealdb.com/api/json/v1/1/random.php"
         random_meals = []
-        for _ in range(4):
+        for _ in range(6):
             response = requests.get(random_api_url)
             if response.status_code == 200:
                 data = response.json()
@@ -76,7 +79,7 @@ def dishes_list(request):
             else:
                 break
 
-    return render(request, 'dishes/dishes.html', {'categories': categories, 'selected_category': selected_category, 'random_meals': random_meals})
+    return render(request, 'dishes/dishes.html', {'categories': categories, 'selected_category': selected_category, 'random_meals': random_meals, 'active_category': active_category})
 
 # Returns a detail page for a user created dish
 def dishes_detail(request, dish_id):
