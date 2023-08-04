@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<<<<<<< HEAD
 <div id="active-category">
     <a class="right" href="{% url 'dishes_create' %}"><button>Add a Dish</button></a>
     {% if selected_category %}
@@ -30,6 +31,20 @@
             <a href="?category=Breakfast" id="breakfast">Breakfast</a>
             <a href="?category=Goat" id="goat">Goat</a>
         </div>
+=======
+
+    <div id="active-category">
+        {% if selected_category %}
+            You are viewing   <span id="active-category-text">{{ active_category }}</span> now
+            <a href="{% url 'dishes' %}" id="reset-category">
+                <i class="fa fa-close" style="font-size:48px;color:red"></i>
+            </a>
+        {% else %}
+        <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
+        Choose a Category
+        <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
+        {% endif %}
+>>>>>>> main
     </div>
 </form>
 <ul id="meal-list">
@@ -42,4 +57,51 @@
 </ul>
 
 
+<<<<<<< HEAD
+=======
+    <ul id="meal-list">
+        {% for meal in random_meals %}
+        <li class="meal-card">
+            <h3>{{ meal.strMeal }}</h3>
+            <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}">
+            <form class="add-to-list-form" action="{% url 'add_to_my_list' meal.strMeal %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="+" class="add-button" style="display: none;">
+                <span class="heart-icon" id="dishes-heart">
+                    <i class="fa fa-heart-o"></i>
+                </span>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heartIcons = document.querySelectorAll('.heart-icon');
+        
+            heartIcons.forEach(heartIcon => {
+                const form = heartIcon.closest('.add-to-list-form');
+                const addButton = form.querySelector('.add-button');
+        
+                heartIcon.addEventListener('click', function() {
+                    form.submit();
+                });
+            });
+        });
+    </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  $(".heart-icon").on("mouseenter", function() {
+    $(this).find("i").removeClass("fa-heart-o").addClass("fa-heart");
+  });
+
+  $(".heart-icon").on("mouseleave", function() {
+    $(this).find("i").removeClass("fa-heart").addClass("fa-heart-o");
+  });
+});
+</script>
+
+>>>>>>> main
 {% endblock %}

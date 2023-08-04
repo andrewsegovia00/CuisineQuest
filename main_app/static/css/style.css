@@ -183,8 +183,9 @@ input[type="password"] {
 }
 
 .meal-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 2px solid rgb(54, 54, 54);
+  border-radius: 25px;
+  margin: 20px;
   padding: 10px;
   text-align: center;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -192,17 +193,32 @@ input[type="password"] {
 
 .meal-card h3 {
   margin-top: 0;
+  font-size: 30px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 
 .meal-card img {
   max-width: 100%;
   height: auto;
-  border-radius: 5px;
+  border-radius: 25px;
+  padding: 20px;
+}
+
+#dishes-heart {
+  right: 0;
+  font-size: 30px;
+  cursor: pointer;
+  color: red;
 }
 
 #active-category {
   text-align: center;
-  margin: 20px;
+  margin: 50px;
   font-size: 40px;
 }
 
@@ -225,6 +241,67 @@ input[type="password"] {
   transform: scale(1.2);
 }
 
+<<<<<<< HEAD
 #detailContainer {
   margin-top: 5rem;
 }
+=======
+/* for daily dish css */
+#dish-card {
+  position: relative;
+  max-width: 1000px;
+  border: 2px solid rgb(54, 54, 54);
+  border-radius: 25px;
+  margin: 20px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.refresh-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.refresh-button:hover {
+  transform: scale(1.2);
+}
+
+#dish-card h3 {
+  margin-top: 10px;
+}
+
+#dish-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10%;
+  padding: 50px;
+  padding-top: 20px;
+}
+
+#card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#daily-heart {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 48px;
+  cursor: pointer;
+  color: red;
+  margin: 10px;
+}
+
+
+>>>>>>> main
