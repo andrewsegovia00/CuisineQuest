@@ -28,14 +28,12 @@
         </ul>
         <ul class="right">
           {% if user.is_authenticated %}
-          <div id="hamburgerClosed"></div>
-          <div id="hidden">
-            <li><a href="{% url 'mylist_index' %}">My Favorites</a></li>
+          <div>
             <li><a href="{% url 'daily_dish' %}">Daily Dish</a></li>
-            <li><a href="{% url 'dishes' %}">More Dishes</a></li>
+            <li><a href="{% url 'dishes' %}">All Dishes</a></li>
+            <li><a href="{% url 'index' %}">My Dishes</a></li>
+            <li><a href="{% url 'mylist_index' %}">My Favorites</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
-            <li><a href="{% url 'dishes_create' %}">Add a Dish</a></li>
-            <li><a href="{% url 'index' %}">View All Dishes</a></li>
           </div>
           {% else %}
           <li><a href="{% url 'signup' %}">Sign Up</a></li>
@@ -53,5 +51,26 @@
     <div class="right ">All Rights Reserved, &copy; 2023 Cuisine Quest &nbsp;</div>
   </footer>
 </body>
+
+<script>
+  const hambBtn = document.getElementById('hambBtn')
+  const navLinks = document.querySelector('navALinks')
+
+  hambBtn.addEventListener('click', () => {
+    if (hambBtn.classList.contains('hamburgerBtnClosed')) {
+      hambBtn.classList.remove('hamburgerBtnClosed')
+      hambBtn.classList.add('hamburgerBtnOpen')
+      navALinks.classList.remove('hidden')
+      console.log('here2')
+    }
+    else {
+      hambBtn.classList.remove('hamburgerBtnOpen')
+      hambBtn.classList.add('hamburgerBtnClosed')
+      navALinks.classList.add('hidden')
+      console.log('here5')
+    }
+
+  })
+</script>
 
 </html>

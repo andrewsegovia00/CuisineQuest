@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container row">
-  <div class="card col s5">
-    <div class="container">
-      <h1>Dish Details</h1>
+<div id="detailContainer" class="container row">
 
-      <div class="card">
-        <div class="card-content">
+  <div class="col s5">
+    <div class="container">
+      <div class="card-panel">
+        <div class="">
           <p>Origin: {{ dish.origin }}</p>
           {% for photo in dish.photo_set.all %}
           <img class="responsive-img" src="{{photo.url}}">
@@ -24,45 +23,42 @@
             <img src="" />
           </div>
         </div>
-        <p>Description: {{ dish.description|linebreaks }}</p>
-        <div class="row">
+        <p>Description: {{ dish.description }}</p>
+        <div class="row justify-center">
           <a class="col s3" href="{% url 'dishes_update' dish.id %}">Edit</a>
           <a class="col s3" href="{% url 'dishes_delete' dish.id %}">Delete</a>
-          <a class="col s5" href="{% url 'assoc_mylist' dish.id %}">Add to Favorites</a>
+          <a class="col s5" href="{% url 'assoc_mylist' dish.id %}"> <span class="heart-icon"
+              style="font-size: 28px; color: red; cursor: pointer;">&#9829;</span></a>
         </div>
-      </div>
-
-      <div class="col s7">
-        <a class="" href="{% url 'create_comment' dish.id %}">Add Comment</a>
-        {% if comments %}
-
-        <h2>Comments:</h2>
-        {% for comment in comments %}
-        <div class="card-panel">
-          <div class="row justify-between">
-            <div class="col s4">
-              {{ comment.restaurant_name }} Restaurant
-            </div>
-            <div class="col s4">
-              City:{{ comment.city_name }}
-            </div>
-          </div>
-          <div>
-            {{ comment.body }}
-          </div>
-          <div>
-            {{ comment.created_on }}
-          </div>
-          <div class="row">
-            <a class="col s2" href="{% url 'comment_delete' comment.pk %}">Delete</a>
-            <a class="col s2" href="{% url 'comment_update' dish.id comment.pk %}">Edit</a>
-          </div>
-          </p>
-          <a href="{% url 'comment_delete' comment.id %}">Delete</a>
-          <a href="{% url 'comment_update' comment.id %}">Update</a>
-        </div>
-        {% endfor %}
-        {% endif %}
       </div>
     </div>
-    {% endblock %}
+  </div>
+  <a href="{% url 'create_comment' dish.id %}"><button class="right">Add Comment</button></a>
+  <div class="col s7">
+    {% if comments %}
+    {% for comment in comments %}
+    <div class="card-panel">
+      <div class="row justify-between">
+        <div class="col s4">
+          {{ comment.restaurant_name }} Restaurant
+        </div>
+        <div class="col s4">
+          City:{{ comment.city_name }}
+        </div>
+      </div>
+      <div>
+        {{ comment.body }}
+      </div>
+      <div>
+        {{ comment.created_on }}
+      </div>
+      <div class="row">
+        <a class="col s2" href="{% url 'comment_delete' comment.pk %}">Delete</a>
+        <a class="col s2" href="{% url 'comment_update' dish.id comment.pk %}">Edit</a>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

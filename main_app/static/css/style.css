@@ -41,22 +41,23 @@ form {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* #hamburgerClosed {
+.hamburgerClosed {
   background-image: url('../assets/Hamburger.png');
   height: 2rem;
   width: 2rem;
 }
 
-#hamburgerOpen {
+.hamburgerOpen {
   background-image: url('../assets/Hamburger.png');
   height: 2rem;
   width: 2rem;
-} */
-/* 
+}
+
 #hidden {
   display: none;
-} */
-#tags{
+}
+
+#tags {
   font-size: 20px;
 }
 
@@ -65,68 +66,112 @@ form {
   font-size: 24px;
   text-align: center;
   margin-bottom: 20px;
- }
+}
 
-#header-title
-.form-container {
+#header-title .form-container {
   display: flex;
   flex-direction: column;
-  width: 100%; /* Adjust this value as needed */
+  width: 100%;
+  /* Adjust this value as needed */
   max-width: 400px;
-  padding: 40px; /* Add padding to the form container for spacing */
-  justify-content: center; /* Center the form vertically */
-  align-items: center; /* Center the form horizontally */
+  padding: 40px;
+  /* Add padding to the form container for spacing */
+  justify-content: center;
+  /* Center the form vertically */
+  align-items: center;
+  /* Center the form horizontally */
 }
 
 input[type="text"],
-  input[type="password"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  
-  #tags-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .tags-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-  }
-  
-  .tags-row a {
-    display: inline-block;
-    padding: 8px 15px;
-    margin: 5px 20px 5px 20px;
-    border: 2px solid rgb(54, 54, 54);
-    border-radius: 15px;
-    text-decoration: none;
-    color: white;
-    transition: transform 0.2s;
-  }
+input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
 
-  .tags-row a:hover {
-    transform: scale(1.2);
-  }
+#tags-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-#beef { background-color: #FF5733; }
-#chicken { background-color: #FFC300; }
-#dessert { background-color: #C70039; }
-#lamb { background-color: #900C3F; }
-#miscellaneous { background-color: #581845; }
-#pasta { background-color: #2ECC71; }
-#pork { background-color: #3498DB; }
-#seafood { background-color: #1ABC9C; }
-#side { background-color: #27AE60; }
-#starter { background-color: #8E44AD; }
-#vegan { background-color: #E74C3C; }
-#vegetarian { background-color: #9B59B6; }
-#breakfast { background-color: #F39C12; }
-#goat { background-color: #16A085; }
+.tags-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.tags-row a {
+  display: inline-block;
+  padding: 8px 15px;
+  margin: 5px 20px 5px 20px;
+  border: 2px solid rgb(54, 54, 54);
+  border-radius: 15px;
+  text-decoration: none;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.tags-row a:hover {
+  transform: scale(1.2);
+}
+
+#beef {
+  background-color: #FF5733;
+}
+
+#chicken {
+  background-color: #FFC300;
+}
+
+#dessert {
+  background-color: #C70039;
+}
+
+#lamb {
+  background-color: #900C3F;
+}
+
+#miscellaneous {
+  background-color: #581845;
+}
+
+#pasta {
+  background-color: #2ECC71;
+}
+
+#pork {
+  background-color: #3498DB;
+}
+
+#seafood {
+  background-color: #1ABC9C;
+}
+
+#side {
+  background-color: #27AE60;
+}
+
+#starter {
+  background-color: #8E44AD;
+}
+
+#vegan {
+  background-color: #E74C3C;
+}
+
+#vegetarian {
+  background-color: #9B59B6;
+}
+
+#breakfast {
+  background-color: #F39C12;
+}
+
+#goat {
+  background-color: #16A085;
+}
 
 #meal-list {
   display: grid;
@@ -178,4 +223,8 @@ input[type="text"],
 
 #reset-category:hover {
   transform: scale(1.2);
+}
+
+#detailContainer {
+  margin-top: 5rem;
 }
