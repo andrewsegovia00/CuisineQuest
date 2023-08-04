@@ -1,7 +1,9 @@
+import uuid
+import boto3
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Dish, MyList, APIDish, APIList, Comment
+from .models import Dish, MyList, APIDish, APIList, Comment, Photo
 import requests
 import webbrowser
 from django.contrib.auth import login
@@ -11,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CommentForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+import os
 
 # Returns Home template
 def home(request):
@@ -143,47 +146,34 @@ class CommentCreateView(CreateView):
 class CommentUpdateView(UpdateView):
     model = Comment
     fields = ['city_name', 'restaurant_name', 'body']
-<<<<<<< HEAD
     # success_url = reverse_lazy('detail')
     success_url = '/dishes'
-
-
-
-  
-=======
->>>>>>> main
-
     def form_valid(self, form):
         dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
         form.instance.dish_id = dish
         form.instance.user = self.request.user
         return super().form_valid(form)
-
     def get_success_url(self):
-        dish_id = self.kwargs['pk']
+        dish_id = self.kwargs['id']
         return reverse_lazy('detail', kwargs={'dish_id': dish_id})
-
   
 # Deletes comment
 class CommentDeleteView(DeleteView):
     model = Comment
-<<<<<<< HEAD
     success_url = reverse_lazy('detail')
-=======
+
 
     def get_success_url(self):
         dish_id = self.object.dish_id.id
         return reverse_lazy('detail', kwargs={'dish_id': dish_id})
 
 
->>>>>>> main
 
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):
     model = MyList
 
 
-<<<<<<< HEAD
 # # Creates a dishes in favorites
 class CommentUpdateView(UpdateView):
     model = Comment
@@ -192,7 +182,7 @@ class CommentUpdateView(UpdateView):
     def get_success_url(self):
         dish_id = self.object.dish.id if self.object.dish else None
         return reverse_lazy('detail', kwargs={'dish_id': dish_id})    
-=======
+
 # # Creates a dish in favorites
 class MyListCreate(LoginRequiredMixin, CreateView):
     model = MyList
@@ -201,8 +191,6 @@ class MyListCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user 
         return super().form_valid(form)     
->>>>>>> main
-
 
 # Returns a Detail view on each dish
 class MyListDetail(LoginRequiredMixin, DetailView):
@@ -275,3 +263,19 @@ def mylist_index(request):
     favorite_dishes = api_list.dishes.all()
 
     return render(request, 'main_app/mylist_list.html', {'mylist': mylist, 'favorite_dishes': favorite_dishes})
+
+
+def add_photo(request, dish_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            bucket = os.environ['S3_BUCKET']
+            s3.upload_fileobj(photo_file, bucket, key)
+            url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+            Photo.objects.create(url=url, dish_id=dish_id)
+        except Exception as e:
+            print('An error occurred uploading file to S3')
+            print(e)
+    return redirect('detail', dish_id=dish_id)
