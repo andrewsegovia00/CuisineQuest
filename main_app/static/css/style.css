@@ -59,3 +59,35 @@ form {
 #tags{
   font-size: 20px;
 }
+/* #header-title {
+  color: red;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px; /* Add some spacing below the header title */
+ /* */ 
+ #header-title
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Adjust this value as needed */
+  max-width: 400px;
+  padding: 40px; /* Add padding to the form container for spacing */
+  justify-content: center; /* Center the form vertically */
+  align-items: center; /* Center the form horizontally */
+}
+
+input[type="text"],
+  input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
