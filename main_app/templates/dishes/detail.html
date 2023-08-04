@@ -1,51 +1,67 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container row">
+  <div class="card col s5">
 <div class="container">
   <h1>Dish Details</h1>
 
-<<<<<<< HEAD
-<h1>Dish Details</h1>
-
-<div class="card">
-<<<<<<< HEAD
-=======
   <div class="card">
->>>>>>> main
     <div class="card-content">
-      <span class="card-title">{{ dish.name }}</span>
       <p>Origin: {{ dish.origin }}</p>
-      <p>Description: {{ dish.description|linebreaks }}</p>
+      {% for photo in dish.photo_set.all %}
+      <img class="responsive-img" src="{{photo.url}}">
+      {% empty %}
+      <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+      <form action="{% url 'add_photo' dish.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+        {% csrf_token %}
+        <input type="file" name="photo-file">
+        <br><br>
+        <button type="submit" class="btn">Upload Photo</button>
+      </form>
+      {% endfor %}
+      <div>
+        <span class="card-title">{{ dish.name }}</span>
+        <img src="" />
+      </div>
     </div>
-    <div class="card-action">
-      <a href="{% url 'dishes_update' dish.id %}">Edit</a>
-      <a href="{% url 'dishes_delete' dish.id %}">Delete</a>
-      <a href="{% url 'assoc_mylist' dish.id %}">Add to Favorites</a>
+    <p>Description: {{ dish.description|linebreaks }}</p>
+    <div class="row">
+      <a class="col s3" href="{% url 'dishes_update' dish.id %}">Edit</a>
+      <a class="col s3" href="{% url 'dishes_delete' dish.id %}">Delete</a>
+      <a class="col s5" href="{% url 'assoc_mylist' dish.id %}">Add to Favorites</a>
     </div>
-    <a href="{% url 'create_comment' dish.id %}">Add Comment</a>
+  </div>
+
+  <div class="col s7">
+    <a class="" href="{% url 'create_comment' dish.id %}">Add Comment</a>
     {% if comments %}
 
     <h2>Comments:</h2>
     {% for comment in comments %}
-    <div class="comment">
-      <p><strong>
-          {{ comment.created_on }}
-        </strong>
-      </p>
-      <p>
-        City:{{ comment.city_name }}
-      </p>
-      <p>
-        Restaurant: {{ comment.restaurant_name }}
-      </p>
-      <p>
+    <div class="card-panel">
+      <div class="row justify-between">
+        <div class="col s4">
+          {{ comment.restaurant_name }} Restaurant
+        </div>
+        <div class="col s4">
+          City:{{ comment.city_name }}
+        </div>
+      </div>
+      <div>
         {{ comment.body }}
+      </div>
+      <div>
+        {{ comment.created_on }}
+      </div>
+      <div class="row">
+        <a class="col s2" href="{% url 'comment_delete' comment.pk %}">Delete</a>
+        <a class="col s2" href="{% url 'comment_update' dish.id comment.pk %}">Edit</a>
+      </div>
       </p>
-<<<<<<< HEAD
       <a href="{% url 'comment_delete' comment.id %}">Delete</a>
       <a href="{% url 'comment_update' comment.id %}">Update</a>
     </div>
       {% endfor %}
-=======
   <div class="card-content">
     <span class="card-title">{{ dish.name }}</span>
     <p>Origin: {{ dish.origin }}</p>
@@ -80,26 +96,9 @@
   {% endfor %}
   {% endif %}
 </div>
->>>>>>> main
-
-=======
     </div>
-    <a href="{% url 'comment_delete' comment.pk %}">Delete Comment</a>
-    <a href="{% url 'comment_update' dish.id comment.pk %}">Update Comment</a>
     {% endfor %}
     {% endif %}
   </div>
-  {% for photo in dish.photo_set.all %}
-  <img class="responsive-img card-panel" src="{{photo.url}}">
-  {% empty %}
-  <div class="card-panel teal-text center-align">No Photos Uploaded</div>
-  <form action="{% url 'add_photo' dish.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
-    {% csrf_token %}
-    <input type="file" name="photo-file">
-    <br><br>
-    <button type="submit" class="btn">Upload Photo</button>
-  </form>
-  {% endfor %}
 </div>
->>>>>>> main
 {% endblock %}
