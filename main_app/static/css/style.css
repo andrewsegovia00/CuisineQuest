@@ -59,13 +59,15 @@ form {
 #tags{
   font-size: 20px;
 }
-/* #header-title {
+
+#header-title {
   color: red;
   font-size: 24px;
   text-align: center;
-  margin-bottom: 20px; /* Add some spacing below the header title */
- /* */ 
- #header-title
+  margin-bottom: 20px;
+ }
+
+#header-title
 .form-container {
   display: flex;
   flex-direction: column;
@@ -84,10 +86,3 @@ input[type="text"],
     margin-bottom: 10px;
   }
   
-
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
