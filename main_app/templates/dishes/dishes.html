@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Random Dishes</h1>
 
 
     <div id="active-category">
         {% if selected_category %}
             You are viewing   <span id="active-category-text">{{ active_category }}</span> now
-            <a href="{% url 'dishes' %}" id="reset-category">x</a>
+            <a href="{% url 'dishes' %}" id="reset-category">
+                <i class="fa fa-close" style="font-size:48px;color:red"></i>
+            </a>
         {% else %}
-            Choose a Category
+        <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
+        Choose a Category
+        <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
         {% endif %}
     </div>
 
