@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<<<<<<< HEAD
 <div id="active-category">
-    <a class="right" href="{% url 'dishes_create' %}"><button>Add a Dish</button></a>
     {% if selected_category %}
-    You are viewing <span id="active-category-text">{{ active_category }}</span> now
-    <a href="{% url 'dishes' %}" id="reset-category">x</a>
+        You are viewing   <span id="active-category-text">{{ active_category }}</span> now
+        <a href="{% url 'dishes' %}" id="reset-category">
+            <i class="fa fa-close" style="font-size:48px;color:red"></i>
+        </a>
     {% else %}
+    <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
     Choose a Category
+    <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
     {% endif %}
 </div>
+
 <form id="tags" method="get" action="{% url 'dishes' %}">
     <div id="tags-container">
         <div class="tags-row">
@@ -31,34 +34,9 @@
             <a href="?category=Breakfast" id="breakfast">Breakfast</a>
             <a href="?category=Goat" id="goat">Goat</a>
         </div>
-=======
-
-    <div id="active-category">
-        {% if selected_category %}
-            You are viewing   <span id="active-category-text">{{ active_category }}</span> now
-            <a href="{% url 'dishes' %}" id="reset-category">
-                <i class="fa fa-close" style="font-size:48px;color:red"></i>
-            </a>
-        {% else %}
-        <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
-        Choose a Category
-        <i class="fa fa-arrow-down" style="font-size:48px;color:green"></i>
-        {% endif %}
->>>>>>> main
-    </div>
 </form>
-<ul id="meal-list">
-    {% for meal in random_meals %}
-    <li class="meal-card">
-        <h3>{{ meal.strMeal }}</h3>
-        <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}">
-    </li>
-    {% endfor %}
-</ul>
 
 
-<<<<<<< HEAD
-=======
     <ul id="meal-list">
         {% for meal in random_meals %}
         <li class="meal-card">
@@ -103,5 +81,4 @@ $(document).ready(function() {
 });
 </script>
 
->>>>>>> main
 {% endblock %}
