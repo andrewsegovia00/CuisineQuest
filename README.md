@@ -11,7 +11,7 @@ Dive into a world full of delicious food choices with Cuisine Quest! Unleash you
 ![Home Page](/main_app/static/assets/CQHome.png)
 
 #### All Dishes Page
-![Dashboard Page](/main_app/static/assets/allDishes.png)
+![Dashboard Page](/main_app/static/assets/AllDishes.png)
 
 #### User's Favorite Page
 ![Fav List Page](/main_app/static/assets/favorites.png)
