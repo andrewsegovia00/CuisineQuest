@@ -20,7 +20,7 @@ python3 manage.py runserver
 
 Here's a live link to check out the app! [Live Link](https://cuisine-quest-app-72c4b2078ce8.herokuapp.com/)
 
-Here's a link to our Trello Board: [Trello Board](https://trello.com/b/GEMaqcaK/flight-tracker-app)
+Here's a link to our Trello Board: [Trello Board](https://trello.com/invite/b/H5CgLobg/ATTI12e846a40b7c81b7aac01714fbbedf358BA56E74/project-x)
 
 And a link to our Presentation: [CQ Presentation](https://docs.google.com/presentation/d/1WfC8VgTBY0pQOlEFjcsf_ahRLroUgU2QxTImZARp6ww/edit?usp=sharing)
 
