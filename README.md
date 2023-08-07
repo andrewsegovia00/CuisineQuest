@@ -20,6 +20,10 @@ python3 manage.py runserver
 
 Here's a live link to check out the app! [Live Link](https://cuisine-quest-app-72c4b2078ce8.herokuapp.com/)
 
+Here's a link to our Trello Board: [Trello Board](https://trello.com/b/GEMaqcaK/flight-tracker-app)
+
+And a link to our Presentation: [CQ Presentation](https://docs.google.com/presentation/d/1WfC8VgTBY0pQOlEFjcsf_ahRLroUgU2QxTImZARp6ww/edit?usp=sharing)
+
 Want to deploy it locally? No problem! Here's a guide:
 
 Clone the repository: Start by cloning this GitHub repository to your local machine using the following command:
@@ -85,5 +89,3 @@ Explore and Enjoy: Now you're all set to explore Cuisine Quest's features and en
 
 #### Sign Up
 ![Sign Page](/main_app/static/assets/SignUp.png)
-
-[Link for Trello Board](https://trello.com/b/GEMaqcaK/flight-tracker-app)
