@@ -40,14 +40,6 @@
                 <a href="?category=Goat" id="goat">Goat</a>
             </div>
     </form>
-    <ul id="meal-list">
-        {% for meal in random_meals %}
-        <li class="meal-card">
-            <h3>{{ meal.strMeal }}</h3>
-            <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}">
-        </li>
-        {% endfor %}
-    </ul>
 
     <ul id="meal-list">
         {% for meal in random_meals %}
