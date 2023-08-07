@@ -10,13 +10,14 @@
           {% for photo in dish.photo_set.all %}
           <img class="responsive-img" src="{{photo.url}}">
           {% empty %}
-          <div class="card-panel teal-text center-align">No Photos Uploaded</div>
-          <form action="{% url 'add_photo' dish.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
-            {% csrf_token %}
-            <input type="file" name="photo-file">
-            <br><br>
-            <button type="submit" class="btn">Upload Photo</button>
-          </form>
+          <div class="card-panel">
+            <div class="teal-text center-align">No Photos Uploaded</div>
+            <form action="{% url 'add_photo' dish.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+              {% csrf_token %}
+              <input type="file" name="photo-file">
+              <button type="submit" class="btn">Upload Photo</button>
+            </form>
+          </div>
           {% endfor %}
           <div>
             <span class="card-title">{{ dish.name }}</span>
@@ -24,11 +25,14 @@
           </div>
         </div>
         <p>Description: {{ dish.description }}</p>
-        <div class="row justify-center">
+        <div class="row justify-center valign-wrapper">
           <a class="col s3" href="{% url 'dishes_update' dish.id %}">Edit</a>
           <a class="col s3" href="{% url 'dishes_delete' dish.id %}">Delete</a>
-          <a class="col s5" href="{% url 'assoc_mylist' dish.id %}"> <span class="heart-icon"
-              style="font-size: 28px; color: red; cursor: pointer;">&#9829;</span></a>
+          <a class="col s5" href="{% url 'assoc_mylist' dish.id %}">
+            <span class="heart-icon" id="dishes-heart">
+              <i class="fa fa-heart-o"></i>
+            </span>
+          </a>
         </div>
       </div>
     </div>
@@ -43,7 +47,7 @@
           {{ comment.restaurant_name }} Restaurant
         </div>
         <div class="col s4">
-          City:{{ comment.city_name }}
+          City: {{ comment.city_name }}
         </div>
       </div>
       <div>
@@ -61,4 +65,16 @@
     {% endif %}
   </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $(".heart-icon").on("mouseenter", function () {
+      $(this).find("i").removeClass("fa-heart-o").addClass("fa-heart");
+    });
+
+    $(".heart-icon").on("mouseleave", function () {
+      $(this).find("i").removeClass("fa-heart").addClass("fa-heart-o");
+    });
+  });
+</script>
 {% endblock %}

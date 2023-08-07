@@ -241,11 +241,10 @@ input[type="password"] {
   transform: scale(1.2);
 }
 
-<<<<<<< HEAD
 #detailContainer {
   margin-top: 5rem;
 }
-=======
+
 /* for daily dish css */
 #dish-card {
   position: relative;
@@ -303,5 +302,7 @@ input[type="password"] {
   margin: 10px;
 }
 
-
->>>>>>> main
+#btn {
+  margin-top: 3rem;
+  cursor: pointer;
+}

@@ -53,6 +53,12 @@ nav ul a {
     padding-left: 1.8rem;
     padding-right: 1.8rem;
     text-align: center;
+    cursor: pointer;
+}
+
+#mainBtn {
+    margin-top: 3rem;
+    cursor: pointer;
 }
 
 .arrow {
@@ -89,3 +95,8 @@ nav ul a {
 #hidden {
     display: none;
 } */
+
+#btn {
+    margin-top: 3rem;
+    cursor: pointer;
+}

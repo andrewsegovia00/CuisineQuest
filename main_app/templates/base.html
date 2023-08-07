@@ -52,25 +52,4 @@
   </footer>
 </body>
 
-<script>
-  const hambBtn = document.getElementById('hambBtn')
-  const navLinks = document.querySelector('navALinks')
-
-  hambBtn.addEventListener('click', () => {
-    if (hambBtn.classList.contains('hamburgerBtnClosed')) {
-      hambBtn.classList.remove('hamburgerBtnClosed')
-      hambBtn.classList.add('hamburgerBtnOpen')
-      navALinks.classList.remove('hidden')
-      console.log('here2')
-    }
-    else {
-      hambBtn.classList.remove('hamburgerBtnOpen')
-      hambBtn.classList.add('hamburgerBtnClosed')
-      navALinks.classList.add('hidden')
-      console.log('here5')
-    }
-
-  })
-</script>
-
 </html>

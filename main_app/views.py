@@ -149,10 +149,12 @@ class CommentCreateView(CreateView):
 class CommentUpdateView(UpdateView):
     model = Comment
     fields = ['city_name', 'restaurant_name', 'body']
-    # success_url = reverse_lazy('detail')
-    success_url = '/dishes'
+    success_url = reverse_lazy('/dishes')
+    # success_url = '/detail'
+    
     def form_valid(self, form):
-        dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
+        # dish = get_object_or_404(Dish, pk=self.kwargs['pk'])
+        dish = get_object_or_404(Dish, pk=self.object.dish_id_id)
         form.instance.dish_id = dish
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -175,16 +177,6 @@ class CommentDeleteView(DeleteView):
 # Returns all dishes in favorites
 class MyListIndex(LoginRequiredMixin, ListView):
     model = MyList
-
-
-# # Creates a dishes in favorites
-class CommentUpdateView(UpdateView):
-    model = Comment
-    fields = ['city_name', 'restaurant_name', 'body']
-
-    def get_success_url(self):
-        dish_id = self.object.dish.id if self.object.dish else None
-        return reverse_lazy('detail', kwargs={'dish_id': dish_id})    
 
 # # Creates a dish in favorites
 class MyListCreate(LoginRequiredMixin, CreateView):

@@ -15,7 +15,14 @@
                 <img class="responsive-img" src="../static/assets/homeGif.png" />
             </div>
         </div>
-        <button class="mainBtn">Let's Go!<img class="arrow" src="../static/assets/arrow.png"></button>
+        <div>
+            <a href="{% url 'daily_dish' %}">
+                <button id="btn" class="mainBtn valign-wrapper">
+                    Let's Go!
+                    <img class="arrow" src="../static/assets/arrow.png">
+                </button>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}
